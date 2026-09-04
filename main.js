@@ -2,7 +2,7 @@
   'use strict';
 
   var FRESHA = 'https://www.fresha.com/a/real-beauty-emporium-george-york-street-fjnzzo0g';
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
 
   function book(id) {
     return id ? FRESHA + '/booking?offerItemId=' + encodeURIComponent(id) : FRESHA + '/booking?allOffer=true&menu=true';
@@ -55,7 +55,8 @@
     var price = (it.o ? '<span class="row-was">' + rand(it.o) + '</span>' : '')
       + (it.p.from ? '<span class="from">from</span>' : '') + rand(it.p.v);
     return '<li class="row">'
-      + '<div class="row-main"><span class="row-name">' + esc(it.n) + '</span><span class="row-leader"></span><span class="row-price">' + price + '</span></div>'
+      + '<span class="row-name">' + esc(it.n) + '</span>'
+      + '<span class="row-price">' + price + '</span>'
       + '<a class="row-book" href="' + book(it.id) + '" target="_blank" rel="noopener" aria-label="Book ' + esc(it.n) + ' on Fresha">Book</a>'
       + (meta.length ? '<div class="row-meta">' + meta.join('<span class="dot" aria-hidden="true">·</span>') + '</div>' : '')
       + '</li>';
@@ -166,8 +167,12 @@
       entries.forEach(function (en) {
         if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
     Array.prototype.forEach.call(revealEls, function (el) { io.observe(el); });
+    // fail-safe: nothing stays hidden if the observer never fires (old browsers, print, odd embeds)
+    setTimeout(function () {
+      Array.prototype.forEach.call(revealEls, function (el) { el.classList.add('in'); });
+    }, 4000);
   }
 
   document.getElementById('year').textContent = String(new Date().getFullYear());
