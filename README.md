@@ -13,7 +13,7 @@ Then open http://localhost:5173
 ```
 index.html      the page (copy, sections, team, contact details)
 styles.css      all styling
-main.js         price-list tabs, reviews, opening-hours status, mobile nav, reveal + parallax
+main.js         price-list tabs, reviews, opening-hours status, mobile nav, scroll reveal
 data.js         the service menu (RBE_MENU) and reviews (RBE_REVIEWS) – edit prices here
 img/            photos (salon shelves, team portraits and nail sets from the salon's Fresha listing; treatment shots from Unsplash)
 favicon.svg
@@ -50,4 +50,16 @@ Groups and categories are the outer structure of the same file.
 3. Team: Fresha lists Katy, Ahisa, Cara, Gwen and Fallon. Reviews also mention Marcelle (stylist) and Melissa (beauty therapist); add them if they are still on the team.
 4. Google reviews: "4,729 Google reviews" in the brief is almost certainly Google's "4,7 ★ · 29 reviews" run together, so the site only quotes the verifiable Fresha figures.
 5. Replace the Unsplash treatment photos (hair, barber, facial, massage, makeup) with the salon's own when available. The file names in `img/` say what each one is.
-6. Domain and hosting: any static host works (Netlify, Vercel, GitHub Pages, Afrihost). Upload the folder as is.
+6. Domain and hosting: any static host works (Cloudflare Pages, Netlify, Vercel, Afrihost). Upload the folder as is.
+
+## Deploying to Cloudflare Pages
+
+This repo needs no build step, so the Pages setup is:
+
+1. [Cloudflare dashboard](https://dash.cloudflare.com) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git** → pick `saltybagel21/real-beauty-emporium`.
+2. Build settings:
+   - **Framework preset:** None
+   - **Build command:** *(leave empty)*
+   - **Build output directory:** `/`
+3. **Save and Deploy.** Cloudflare serves the repo root as-is — `index.html` at the site root, everything else (`styles.css`, `main.js`, `data.js`, `img/`) loaded relative to it.
+4. Every push to `main` redeploys automatically. To use a real domain, add it under the Pages project's **Custom domains** tab.
